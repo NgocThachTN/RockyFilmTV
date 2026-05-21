@@ -44,6 +44,7 @@ class CategoryViewModel @Inject constructor(
                 val newMovies = when (currentCategoryType) {
                     "genre" -> repository.getPhimTheoTheLoaiV1(currentType, currentPage)
                     "country" -> repository.getPhimTheoQuocGiaV1(currentType, currentPage)
+                    "phim-moi" -> repository.getPhimMoiCapNhat(currentPage)
                     else -> repository.getPhimTheoTheLoai(currentType, currentPage)
                 }
                 loadedMovies.addAll(newMovies)

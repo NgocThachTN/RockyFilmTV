@@ -356,7 +356,7 @@ fun PlayerScreen(
                                 fontWeight = FontWeight.Bold
                             )
                             Text(
-                                text = "Đang phát: ${state.currentEpisode?.name ?: ""}",
+                                text = "Tập: ${state.currentEpisode?.name ?: ""}",
                                 color = Color.LightGray,
                                 fontSize = 14.sp
                             )

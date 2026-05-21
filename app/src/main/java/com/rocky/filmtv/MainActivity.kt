@@ -59,8 +59,8 @@ fun RockyFilmTVAppNavigation() {
                 onNavigateToHistory = {
                     navController.navigate(Screen.History.route)
                 },
-                onNavigateToCategory = { type, title ->
-                    navController.navigate(Screen.Category.createRoute("type", type, title))
+                onNavigateToCategory = { categoryType, type, title ->
+                    navController.navigate(Screen.Category.createRoute(categoryType, type, title))
                 },
                 onNavigateToGenreList = {
                     navController.navigate(Screen.GenreList.route)

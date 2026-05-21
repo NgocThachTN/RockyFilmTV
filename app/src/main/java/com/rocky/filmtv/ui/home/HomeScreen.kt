@@ -28,7 +28,7 @@ fun HomeScreen(
     onNavigateToSearch: () -> Unit,
     onNavigateToFavorite: () -> Unit,
     onNavigateToHistory: () -> Unit,
-    onNavigateToCategory: (String, String) -> Unit,
+    onNavigateToCategory: (String, String, String) -> Unit,
     onNavigateToGenreList: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel()
@@ -193,7 +193,7 @@ fun HomeScreen(
                             }
 
                             Button(
-                                onClick = { onNavigateToCategory("phim-bo", "Phim Bộ") },
+                                onClick = { onNavigateToCategory("type", "phim-bo", "Phim Bộ") },
                                 colors = ButtonDefaults.colors(
                                     containerColor = Color.Transparent,
                                     contentColor = Color.White,
@@ -209,7 +209,7 @@ fun HomeScreen(
                             }
 
                             Button(
-                                onClick = { onNavigateToCategory("phim-le", "Phim Lẻ") },
+                                onClick = { onNavigateToCategory("type", "phim-le", "Phim Lẻ") },
                                 colors = ButtonDefaults.colors(
                                     containerColor = Color.Transparent,
                                     contentColor = Color.White,
@@ -243,7 +243,8 @@ fun HomeScreen(
                         title = "Phim Mới Cập Nhật",
                         movies = state.phimMoi,
                         onMovieClick = { movie -> onNavigateToDetail(movie.slug) },
-                        onMovieFocused = { movie -> viewModel.setFeaturedMovie(movie) }
+                        onMovieFocused = { movie -> viewModel.setFeaturedMovie(movie) },
+                        onSeeAllClick = { onNavigateToCategory("phim-moi", "phim-moi", "Phim Mới Cập Nhật") }
                     )
                 }
 
@@ -253,7 +254,8 @@ fun HomeScreen(
                         title = "Phim Lẻ Nổi Bật",
                         movies = state.phimLe,
                         onMovieClick = { movie -> onNavigateToDetail(movie.slug) },
-                        onMovieFocused = { movie -> viewModel.setFeaturedMovie(movie) }
+                        onMovieFocused = { movie -> viewModel.setFeaturedMovie(movie) },
+                        onSeeAllClick = { onNavigateToCategory("type", "phim-le", "Phim Lẻ") }
                     )
                 }
 
@@ -263,7 +265,8 @@ fun HomeScreen(
                         title = "Phim Bộ Đặc Sắc",
                         movies = state.phimBo,
                         onMovieClick = { movie -> onNavigateToDetail(movie.slug) },
-                        onMovieFocused = { movie -> viewModel.setFeaturedMovie(movie) }
+                        onMovieFocused = { movie -> viewModel.setFeaturedMovie(movie) },
+                        onSeeAllClick = { onNavigateToCategory("type", "phim-bo", "Phim Bộ") }
                     )
                 }
 
@@ -273,7 +276,8 @@ fun HomeScreen(
                         title = "Hoạt Hình & Anime",
                         movies = state.hoatHinh,
                         onMovieClick = { movie -> onNavigateToDetail(movie.slug) },
-                        onMovieFocused = { movie -> viewModel.setFeaturedMovie(movie) }
+                        onMovieFocused = { movie -> viewModel.setFeaturedMovie(movie) },
+                        onSeeAllClick = { onNavigateToCategory("type", "hoat-hinh", "Hoạt Hình") }
                     )
                 }
 
@@ -283,7 +287,8 @@ fun HomeScreen(
                         title = "TV Shows hấp dẫn",
                         movies = state.tvShows,
                         onMovieClick = { movie -> onNavigateToDetail(movie.slug) },
-                        onMovieFocused = { movie -> viewModel.setFeaturedMovie(movie) }
+                        onMovieFocused = { movie -> viewModel.setFeaturedMovie(movie) },
+                        onSeeAllClick = { onNavigateToCategory("type", "tv-shows", "TV Shows") }
                     )
                 }
             }
