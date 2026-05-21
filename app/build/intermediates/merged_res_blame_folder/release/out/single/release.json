@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "com.rocky.filmtv.app-merged_res-63:/drawable_ic_launcher.xml.flat",
+        "source": "com.rocky.filmtv.app-main-64:/drawable/ic_launcher.xml"
+    },
+    {
+        "merged": "com.rocky.filmtv.app-merged_res-63:/drawable_app_banner.xml.flat",
+        "source": "com.rocky.filmtv.app-main-64:/drawable/app_banner.xml"
+    }
+]
