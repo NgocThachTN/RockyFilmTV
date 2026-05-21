@@ -4,7 +4,30 @@
     android:height="180dp"
     android:viewportWidth="320"
     android:viewportHeight="180">
+
+    <!-- Deep Navy Background matching the app theme -->
     <path
-        android:fillColor="#E50914"
+        android:fillColor="#0A192F"
         android:pathData="M0,0h320v180h-320z"/>
+
+    <!-- Outer Glow Circle (Darker blue for outer ring/shadow) -->
+    <path
+        android:fillColor="#0052D4"
+        android:pathData="M160,42A48,48 0,1,1 159.9,42Z"/>
+
+    <!-- Main Circle (Vibrant light sea blue) -->
+    <path
+        android:fillColor="#00D2FF"
+        android:pathData="M160,46A44,44 0,1,1 159.9,46Z"/>
+
+    <!-- Inner Accent Circle (Brighter cyan) -->
+    <path
+        android:fillColor="#00F0FF"
+        android:pathData="M160,50A40,40 0,1,1 159.9,50Z"/>
+
+    <!-- Play Triangle (White, centered, pointing right) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M150,70L176,90L150,110Z"/>
+
 </vector>

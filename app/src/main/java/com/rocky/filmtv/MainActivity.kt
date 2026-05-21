@@ -14,6 +14,7 @@ import androidx.navigation.navArgument
 import com.rocky.filmtv.core.navigation.Screen
 import com.rocky.filmtv.core.theme.RockyFilmTVTheme
 import com.rocky.filmtv.ui.category.CategoryScreen
+import com.rocky.filmtv.ui.category.GenreListScreen
 import com.rocky.filmtv.ui.detail.DetailScreen
 import com.rocky.filmtv.ui.favorite.FavoriteScreen
 import com.rocky.filmtv.ui.history.HistoryScreen
@@ -59,7 +60,10 @@ fun RockyFilmTVAppNavigation() {
                     navController.navigate(Screen.History.route)
                 },
                 onNavigateToCategory = { type, title ->
-                    navController.navigate(Screen.Category.createRoute(type, title))
+                    navController.navigate(Screen.Category.createRoute("type", type, title))
+                },
+                onNavigateToGenreList = {
+                    navController.navigate(Screen.GenreList.route)
                 }
             )
         }
@@ -123,14 +127,17 @@ fun RockyFilmTVAppNavigation() {
         composable(
             route = Screen.Category.route,
             arguments = listOf(
+                navArgument("categoryType") { type = NavType.StringType },
                 navArgument("type") { type = NavType.StringType },
                 navArgument("title") { type = NavType.StringType }
             )
         ) { backStackEntry ->
+            val categoryType = backStackEntry.arguments?.getString("categoryType") ?: "type"
             val type = backStackEntry.arguments?.getString("type") ?: ""
             val title = backStackEntry.arguments?.getString("title") ?: ""
             
             CategoryScreen(
+                categoryType = categoryType,
                 type = type,
                 title = title,
                 onNavigateToDetail = { slug ->
@@ -159,6 +166,18 @@ fun RockyFilmTVAppNavigation() {
             HistoryScreen(
                 onNavigateToDetail = { slug ->
                     navController.navigate(Screen.Detail.createRoute(slug))
+                },
+                onBackClick = {
+                    navController.navigateUp()
+                }
+            )
+        }
+
+        // 8. Genre Selection Screen
+        composable(route = Screen.GenreList.route) {
+            GenreListScreen(
+                onNavigateToCategory = { categoryType, type, title ->
+                    navController.navigate(Screen.Category.createRoute(categoryType, type, title))
                 },
                 onBackClick = {
                     navController.navigateUp()

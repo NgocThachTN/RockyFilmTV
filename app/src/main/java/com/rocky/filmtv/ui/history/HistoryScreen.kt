@@ -58,9 +58,13 @@ fun HistoryScreen(
                         contentColor = Color.White,
                         focusedContainerColor = Color.White,
                         focusedContentColor = Color.Black
-                    )
+                    ),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
                 ) {
-                    Text("← Quay Lại")
+                    Text(
+                        text = "← Quay Lại",
+                        modifier = Modifier.align(Alignment.CenterVertically)
+                    )
                 }
 
                 Spacer(modifier = Modifier.width(16.dp))
@@ -206,9 +210,15 @@ fun HistoryCard(
                     focusedContentColor = Color.Black
                 ),
                 shape = ButtonDefaults.shape(shape = RoundedCornerShape(4.dp)),
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp)
             ) {
-                Text("Xem", fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                Text(
+                    text = "Xem",
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.align(Alignment.CenterVertically)
+                )
             }
 
             Button(
@@ -219,9 +229,14 @@ fun HistoryCard(
                     focusedContainerColor = Color.White,
                     focusedContentColor = Color.Black
                 ),
-                shape = ButtonDefaults.shape(shape = RoundedCornerShape(4.dp))
+                shape = ButtonDefaults.shape(shape = RoundedCornerShape(4.dp)),
+                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp)
             ) {
-                Text("Xóa", fontSize = 11.sp)
+                Text(
+                    text = "Xóa",
+                    fontSize = 11.sp,
+                    modifier = Modifier.align(Alignment.CenterVertically)
+                )
             }
         }
     }

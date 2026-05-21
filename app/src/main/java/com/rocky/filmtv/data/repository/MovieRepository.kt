@@ -31,6 +31,16 @@ class MovieRepository @Inject constructor(
         return response.data?.items?.map { it.toMovie() } ?: emptyList()
     }
 
+    suspend fun getPhimTheoTheLoaiV1(slug: String, page: Int): List<Movie> {
+        val response = apiService.getPhimTheoTheLoaiV1(slug, page)
+        return response.data?.items?.map { it.toMovie() } ?: emptyList()
+    }
+
+    suspend fun getPhimTheoQuocGiaV1(slug: String, page: Int): List<Movie> {
+        val response = apiService.getPhimTheoQuocGiaV1(slug, page)
+        return response.data?.items?.map { it.toMovie() } ?: emptyList()
+    }
+
     suspend fun getChiTietPhim(slug: String): MovieDetail {
         val response = apiService.getChiTietPhim(slug)
         val movieDetailDto = response.movie ?: throw Exception("Movie not found")

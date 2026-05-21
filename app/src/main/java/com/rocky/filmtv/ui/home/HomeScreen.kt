@@ -29,6 +29,7 @@ fun HomeScreen(
     onNavigateToFavorite: () -> Unit,
     onNavigateToHistory: () -> Unit,
     onNavigateToCategory: (String, String) -> Unit,
+    onNavigateToGenreList: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
@@ -79,12 +80,49 @@ fun HomeScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
-                            text = "ROCKY FILM TV",
-                            color = PrimaryRed,
-                            fontSize = 20.sp,
-                            fontWeight = androidx.compose.ui.text.font.FontWeight.Black
-                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            // Stunning Light Sea Blue Circular Play Logo
+                            Box(
+                                modifier = Modifier
+                                    .size(34.dp)
+                                    .background(
+                                        brush = androidx.compose.ui.graphics.Brush.linearGradient(
+                                            colors = listOf(Color(0xFF00F0FF), Color(0xFF0072FF))
+                                        ),
+                                        shape = androidx.compose.foundation.shape.CircleShape
+                                    ),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                androidx.compose.foundation.Canvas(modifier = Modifier.size(14.dp)) {
+                                    val path = androidx.compose.ui.graphics.Path().apply {
+                                        moveTo(size.width * 0.28f, size.height * 0.18f)
+                                        lineTo(size.width * 0.82f, size.height * 0.5f)
+                                        lineTo(size.width * 0.28f, size.height * 0.82f)
+                                        close()
+                                    }
+                                    drawPath(path = path, color = Color.White)
+                                }
+                            }
+
+                            // Typography brand text
+                            Row {
+                                Text(
+                                    text = "ROCKY FILM ",
+                                    color = Color.White,
+                                    fontSize = 19.sp,
+                                    fontWeight = androidx.compose.ui.text.font.FontWeight.Black
+                                )
+                                Text(
+                                    text = "TV",
+                                    color = PrimaryRed,
+                                    fontSize = 19.sp,
+                                    fontWeight = androidx.compose.ui.text.font.FontWeight.Black
+                                )
+                            }
+                        }
 
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -97,9 +135,13 @@ fun HomeScreen(
                                     contentColor = Color.White,
                                     focusedContainerColor = Color.White,
                                     focusedContentColor = Color.Black
-                                )
+                                ),
+                                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
                             ) {
-                                Text("Tìm Kiếm")
+                                Text(
+                                    text = "Tìm Kiếm",
+                                    modifier = Modifier.align(Alignment.CenterVertically)
+                                )
                             }
 
                             Button(
@@ -109,9 +151,13 @@ fun HomeScreen(
                                     contentColor = Color.White,
                                     focusedContainerColor = Color.White,
                                     focusedContentColor = Color.Black
-                                )
+                                ),
+                                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
                             ) {
-                                Text("Yêu Thích")
+                                Text(
+                                    text = "Yêu Thích",
+                                    modifier = Modifier.align(Alignment.CenterVertically)
+                                )
                             }
 
                             Button(
@@ -121,9 +167,29 @@ fun HomeScreen(
                                     contentColor = Color.White,
                                     focusedContainerColor = Color.White,
                                     focusedContentColor = Color.Black
-                                )
+                                ),
+                                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
                             ) {
-                                Text("Lịch Sử Xem")
+                                Text(
+                                    text = "Lịch Sử Xem",
+                                    modifier = Modifier.align(Alignment.CenterVertically)
+                                )
+                            }
+
+                            Button(
+                                onClick = onNavigateToGenreList,
+                                colors = ButtonDefaults.colors(
+                                    containerColor = Color.Transparent,
+                                    contentColor = Color.White,
+                                    focusedContainerColor = Color.White,
+                                    focusedContentColor = Color.Black
+                                ),
+                                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+                            ) {
+                                Text(
+                                    text = "Thể Loại",
+                                    modifier = Modifier.align(Alignment.CenterVertically)
+                                )
                             }
 
                             Button(
@@ -133,9 +199,13 @@ fun HomeScreen(
                                     contentColor = Color.White,
                                     focusedContainerColor = Color.White,
                                     focusedContentColor = Color.Black
-                                )
+                                ),
+                                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
                             ) {
-                                Text("Phim Bộ")
+                                Text(
+                                    text = "Phim Bộ",
+                                    modifier = Modifier.align(Alignment.CenterVertically)
+                                )
                             }
 
                             Button(
@@ -145,9 +215,13 @@ fun HomeScreen(
                                     contentColor = Color.White,
                                     focusedContainerColor = Color.White,
                                     focusedContentColor = Color.Black
-                                )
+                                ),
+                                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
                             ) {
-                                Text("Phim Lẻ")
+                                Text(
+                                    text = "Phim Lẻ",
+                                    modifier = Modifier.align(Alignment.CenterVertically)
+                                )
                             }
                         }
                     }

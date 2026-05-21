@@ -50,9 +50,13 @@ fun FavoriteScreen(
                         contentColor = Color.White,
                         focusedContainerColor = Color.White,
                         focusedContentColor = Color.Black
-                    )
+                    ),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
                 ) {
-                    Text("← Quay Lại")
+                    Text(
+                        text = "← Quay Lại",
+                        modifier = Modifier.align(Alignment.CenterVertically)
+                    )
                 }
 
                 Spacer(modifier = Modifier.width(16.dp))

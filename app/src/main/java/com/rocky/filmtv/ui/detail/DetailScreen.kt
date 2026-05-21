@@ -127,9 +127,13 @@ fun DetailScreen(
                             contentColor = Color.White,
                             focusedContainerColor = Color.White,
                             focusedContentColor = Color.Black
-                        )
+                        ),
+                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
                     ) {
-                        Text("← Quay Lại")
+                        Text(
+                            text = "← Quay Lại",
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        )
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -224,12 +228,17 @@ fun DetailScreen(
                                         contentColor = Color.White,
                                         focusedContainerColor = Color.White,
                                         focusedContentColor = Color.Black
-                                    )
+                                    ),
+                                    contentPadding = PaddingValues(horizontal = 24.dp, vertical = 10.dp)
                                 ) {
                                     val btnText = if (watchHistory != null) {
                                         "Tiếp Tục Xem (${watchHistory?.lastWatchedEpisodeName})"
                                     } else "Xem Ngay"
-                                    Text(btnText, fontWeight = FontWeight.Bold)
+                                    Text(
+                                        text = btnText,
+                                        fontWeight = FontWeight.Bold,
+                                        modifier = Modifier.align(Alignment.CenterVertically)
+                                    )
                                 }
 
                                 Button(
@@ -239,10 +248,15 @@ fun DetailScreen(
                                         contentColor = Color.White,
                                         focusedContainerColor = Color.White,
                                         focusedContentColor = Color.Black
-                                    )
+                                    ),
+                                    contentPadding = PaddingValues(horizontal = 20.dp, vertical = 10.dp)
                                 ) {
                                     val favText = if (isFavorite) "♥ Đã Thích" else "♡ Yêu Thích"
-                                    Text(favText, fontWeight = FontWeight.Bold)
+                                    Text(
+                                        text = favText,
+                                        fontWeight = FontWeight.Bold,
+                                        modifier = Modifier.align(Alignment.CenterVertically)
+                                    )
                                 }
                             }
                         }

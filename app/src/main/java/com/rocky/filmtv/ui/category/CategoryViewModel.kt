@@ -21,12 +21,14 @@ class CategoryViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<UiState<List<Movie>>>(UiState.Loading)
     val uiState: StateFlow<UiState<List<Movie>>> = _uiState.asStateFlow()
 
+    private var currentCategoryType = ""
     private var currentType = ""
     private var currentPage = 1
     private val loadedMovies = mutableListOf<Movie>()
 
-    fun loadCategory(type: String) {
-        if (currentType == type) return // already loaded
+    fun loadCategory(categoryType: String, type: String) {
+        if (currentCategoryType == categoryType && currentType == type) return // already loaded
+        currentCategoryType = categoryType
         currentType = type
         currentPage = 1
         loadedMovies.clear()
@@ -39,11 +41,15 @@ class CategoryViewModel @Inject constructor(
                 _uiState.value = UiState.Loading
             }
             try {
-                val newMovies = repository.getPhimTheoTheLoai(currentType, currentPage)
+                val newMovies = when (currentCategoryType) {
+                    "genre" -> repository.getPhimTheoTheLoaiV1(currentType, currentPage)
+                    "country" -> repository.getPhimTheoQuocGiaV1(currentType, currentPage)
+                    else -> repository.getPhimTheoTheLoai(currentType, currentPage)
+                }
                 loadedMovies.addAll(newMovies)
                 _uiState.value = UiState.Success(loadedMovies.toList())
             } catch (e: Exception) {
-                Timber.e(e, "Error loading categories for type: $currentType")
+                Timber.e(e, "Error loading categories for categoryType: $currentCategoryType, type: $currentType")
                 if (currentPage == 1) {
                     _uiState.value = UiState.Error(e.localizedMessage ?: "Không thể tải danh sách phim")
                 }

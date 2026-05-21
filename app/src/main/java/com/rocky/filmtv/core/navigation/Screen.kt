@@ -13,11 +13,13 @@ sealed class Screen(val route: String) {
         fun createRoute(movieSlug: String, episodeIndex: Int): String = "player/$movieSlug/$episodeIndex"
     }
     
-    object Category : Screen("category/{type}/{title}") {
-        fun createRoute(type: String, title: String): String = "category/$type/$title"
+    object Category : Screen("category/{categoryType}/{type}/{title}") {
+        fun createRoute(categoryType: String, type: String, title: String): String = "category/$categoryType/$type/$title"
     }
     
     object Favorite : Screen("favorite")
     
     object History : Screen("history")
+
+    object GenreList : Screen("genre_list")
 }
