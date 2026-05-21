@@ -41,7 +41,11 @@ fun MovieRow(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
-            itemsIndexed(movies) { index, movie ->
+            itemsIndexed(
+                items = movies,
+                key = { _, movie -> movie.id },
+                contentType = { _, _ -> "movie_card" }
+            ) { index, movie ->
                 MovieCard(
                     movie = movie,
                     onMovieClick = onMovieClick,

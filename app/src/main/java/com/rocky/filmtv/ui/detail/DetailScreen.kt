@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -308,7 +309,7 @@ fun DetailScreen(
                                             focusedContainerColor = Color.White,
                                             focusedContentColor = Color.Black
                                         ),
-                                        shape = RoundedCornerShape(4.dp)
+                                        shape = ButtonDefaults.shape(shape = RoundedCornerShape(4.dp))
                                     ) {
                                         Text(
                                             text = episode.name,

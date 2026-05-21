@@ -129,7 +129,8 @@ fun FeaturedBanner(
 
                     OutlinedButton(
                         onClick = { onDetailClick(movie) },
-                        colors = ButtonDefaults.outlinedButtonColors(
+                        colors = ButtonDefaults.colors(
+                            containerColor = Color.Transparent,
                             contentColor = Color.White,
                             focusedContainerColor = Color.White,
                             focusedContentColor = Color.Black

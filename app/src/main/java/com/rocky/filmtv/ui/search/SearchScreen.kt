@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.TextField
@@ -166,7 +167,11 @@ fun SearchScreen(
                                 verticalArrangement = Arrangement.spacedBy(16.dp),
                                 modifier = Modifier.fillMaxSize()
                             ) {
-                                items(movies) { movie ->
+                                items(
+                                    items = movies,
+                                    key = { it.id },
+                                    contentType = { "movie_card" }
+                                ) { movie ->
                                     MovieCard(
                                         movie = movie,
                                         onMovieClick = { onNavigateToDetail(it.slug) }

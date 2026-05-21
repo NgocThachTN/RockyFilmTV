@@ -205,7 +205,7 @@ fun HistoryCard(
                     focusedContainerColor = Color.White,
                     focusedContentColor = Color.Black
                 ),
-                shape = RoundedCornerShape(4.dp),
+                shape = ButtonDefaults.shape(shape = RoundedCornerShape(4.dp)),
                 modifier = Modifier.weight(1f)
             ) {
                 Text("Xem", fontSize = 11.sp, fontWeight = FontWeight.Bold)
@@ -219,7 +219,7 @@ fun HistoryCard(
                     focusedContainerColor = Color.White,
                     focusedContentColor = Color.Black
                 ),
-                shape = RoundedCornerShape(4.dp)
+                shape = ButtonDefaults.shape(shape = RoundedCornerShape(4.dp))
             ) {
                 Text("Xóa", fontSize = 11.sp)
             }

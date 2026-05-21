@@ -88,7 +88,11 @@ fun FavoriteScreen(
                         .fillMaxWidth()
                         .weight(1f)
                 ) {
-                    items(movies) { movie ->
+                    items(
+                        items = movies,
+                        key = { it.id },
+                        contentType = { "movie_card" }
+                    ) { movie ->
                         MovieCard(
                             movie = movie,
                             onMovieClick = { onNavigateToDetail(it.slug) }

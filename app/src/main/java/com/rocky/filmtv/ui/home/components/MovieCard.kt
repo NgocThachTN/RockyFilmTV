@@ -19,7 +19,10 @@ import androidx.tv.material3.Border
 import androidx.tv.material3.Card
 import androidx.tv.material3.CardDefaults
 import androidx.tv.material3.Text
+import androidx.compose.ui.platform.LocalContext
 import coil.compose.AsyncImage
+import coil.request.CachePolicy
+import coil.request.ImageRequest
 import com.rocky.filmtv.data.remote.mapper.Movie
 
 @Composable
@@ -29,6 +32,7 @@ fun MovieCard(
     modifier: Modifier = Modifier,
     onFocused: ((Movie) -> Unit)? = null
 ) {
+    val context = LocalContext.current
     var isFocused by remember { mutableStateOf(false) }
     val scale by animateFloatAsState(targetValue = if (isFocused) 1.1f else 1.0f, label = "scale")
 
@@ -57,8 +61,17 @@ fun MovieCard(
         shape = CardDefaults.shape(RoundedCornerShape(8.dp))
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
+            val imageRequest = remember(movie.posterUrl, movie.thumbUrl) {
+                ImageRequest.Builder(context)
+                    .data(movie.posterUrl.ifEmpty { movie.thumbUrl })
+                    .crossfade(true)
+                    .diskCachePolicy(CachePolicy.ENABLED)
+                    .memoryCachePolicy(CachePolicy.ENABLED)
+                    .build()
+            }
+            
             AsyncImage(
-                model = movie.posterUrl.ifEmpty { movie.thumbUrl },
+                model = imageRequest,
                 contentDescription = movie.name,
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop

@@ -33,6 +33,6 @@ interface OPhimApiService {
 
     companion object {
         const val BASE_URL = "https://ophim1.com/"
-        const val IMAGE_BASE_URL = "https://img.ophim.cc/uploads/movies/"
+        const val IMAGE_BASE_URL = "https://img.ophim.live/uploads/movies/"
     }
 }

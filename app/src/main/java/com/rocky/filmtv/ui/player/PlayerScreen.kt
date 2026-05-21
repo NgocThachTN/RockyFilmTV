@@ -8,9 +8,9 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
-import androidx.compose.foundation.input.rotary.onRotaryScrollEvent
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.runtime.*
@@ -32,8 +32,11 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MimeTypes
+import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
+import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 import androidx.tv.material3.*
@@ -62,11 +65,15 @@ fun PlayerScreen(
     var totalDuration by remember { mutableStateOf(0L) }
     var bufferPercentage by remember { mutableStateOf(0) }
     var isBuffering by remember { mutableStateOf(true) }
+    var playerError by remember { mutableStateOf<String?>(null) }
 
     // Controller overlay visible state
     var showControls by remember { mutableStateOf(true) }
     val focusRequester = remember { FocusRequester() }
     val lifecycleOwner = LocalLifecycleOwner.current
+
+    // Safely capture the latest exoPlayer state to prevent leaking or releasing active player on recompositions
+    val currentExoPlayer by rememberUpdatedState(exoPlayer)
 
     // Load state
     LaunchedEffect(movieSlug, episodeIndex) {
@@ -81,27 +88,27 @@ fun PlayerScreen(
         }
     }
 
-    // Release and Save history on dispose
-    DisposableEffect(exoPlayer) {
+    // Release and Save history on screen dispose (keyed on Unit/lifecycleOwner to only run once)
+    DisposableEffect(lifecycleOwner) {
         onDispose {
-            exoPlayer?.let { player ->
+            currentExoPlayer?.let { player ->
                 val pos = player.currentPosition
                 val dur = player.duration
                 if (dur > 0) {
                     viewModel.saveHistory(pos, dur)
                 }
                 player.release()
-                Timber.d("ExoPlayer successfully released and progress saved.")
+                Timber.d("ExoPlayer successfully released and progress saved on dispose.")
             }
         }
     }
 
     // Lifecycle Observer for Backgrounding / Foregrounding
-    DisposableEffect(lifecycleOwner, exoPlayer) {
+    DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             when (event) {
                 Lifecycle.Event.ON_PAUSE -> {
-                    exoPlayer?.let { player ->
+                    currentExoPlayer?.let { player ->
                         player.pause()
                         val pos = player.currentPosition
                         val dur = player.duration
@@ -111,7 +118,7 @@ fun PlayerScreen(
                     }
                 }
                 Lifecycle.Event.ON_RESUME -> {
-                    exoPlayer?.play()
+                    currentExoPlayer?.play()
                 }
                 else -> {}
             }
@@ -131,18 +138,33 @@ fun PlayerScreen(
         
         // Release old player if exists
         exoPlayer?.release()
+        playerError = null // Reset playback error on episode load
 
-        val player = ExoPlayer.Builder(context).build().apply {
-            val mediaItem = MediaItem.Builder()
-                .setUri(streamUrl)
-                .setMimeType(MimeTypes.APPLICATION_M3U8) // Support HLS streaming out-of-the-box
-                .build()
-            
-            setMediaItem(mediaItem)
-            prepare()
-            seekTo(state.initialPosition)
-            playWhenReady = true
-        }
+        // Configure HLS HTTP data source with proper User-Agent and Referer headers to bypass anti-hotlinking
+        val httpDataSourceFactory = DefaultHttpDataSource.Factory()
+            .setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+            .setAllowCrossProtocolRedirects(true)
+            .setDefaultRequestProperties(mapOf(
+                "Referer" to "https://ophim1.com/"
+            ))
+        
+        val mediaSourceFactory = DefaultMediaSourceFactory(context)
+            .setDataSourceFactory(httpDataSourceFactory)
+
+        val player = ExoPlayer.Builder(context)
+            .setMediaSourceFactory(mediaSourceFactory)
+            .build()
+            .apply {
+                val mediaItem = MediaItem.Builder()
+                    .setUri(streamUrl)
+                    .setMimeType(MimeTypes.APPLICATION_M3U8) // Support HLS streaming out-of-the-box
+                    .build()
+                
+                setMediaItem(mediaItem)
+                prepare()
+                seekTo(state.initialPosition)
+                playWhenReady = true
+            }
 
         player.addListener(object : Player.Listener {
             override fun onIsPlayingChanged(playing: Boolean) {
@@ -162,6 +184,11 @@ fun PlayerScreen(
                 reason: Int
             ) {
                 currentPosition = player.currentPosition
+            }
+
+            override fun onPlayerError(error: PlaybackException) {
+                Timber.e(error, "ExoPlayer playback error occurred playing $streamUrl")
+                playerError = "Lỗi phát video: " + (error.localizedMessage ?: "Không thể tải luồng video")
             }
         })
 
@@ -237,19 +264,22 @@ fun PlayerScreen(
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator(color = PrimaryRed)
             }
-        } else if (state.isError) {
+        } else if (state.isError || playerError != null) {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = state.errorMessage ?: "Lỗi tải video",
+                    text = playerError ?: state.errorMessage ?: "Lỗi tải video",
                     color = Color.White,
                     fontSize = 18.sp,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
-                Button(onClick = { viewModel.loadEpisode(movieSlug, episodeIndex) }) {
+                Button(onClick = {
+                    playerError = null
+                    viewModel.loadEpisode(movieSlug, episodeIndex)
+                }) {
                     Text("Thử Lại")
                 }
             }
@@ -454,7 +484,13 @@ fun PlayerScreen(
     // Auto-focus Play/Pause button when control shows up to let TV users immediately click
     LaunchedEffect(showControls) {
         if (showControls) {
-            focusRequester.requestFocus()
+            try {
+                // Wait for the AnimatedVisibility layout to attach the button to the tree
+                delay(150)
+                focusRequester.requestFocus()
+            } catch (e: Exception) {
+                Timber.e("Failed to request focus on controls: ${e.message}")
+            }
         }
     }
 }
