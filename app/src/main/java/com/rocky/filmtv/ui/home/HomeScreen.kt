@@ -40,6 +40,7 @@ fun HomeScreen(
     val state by viewModel.uiState.collectAsState()
     val featuredMovie by viewModel.featuredMovie.collectAsState()
     val listState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
 
     Box(
         modifier = modifier
@@ -77,7 +78,14 @@ fun HomeScreen(
                     onNavigateToFavorite = onNavigateToFavorite,
                     onNavigateToHistory = onNavigateToHistory,
                     onNavigateToGenreList = onNavigateToGenreList,
-                    onNavigateToCategory = onNavigateToCategory
+                    onNavigateToCategory = onNavigateToCategory,
+                    modifier = Modifier.onFocusChanged { focusState ->
+                        if (focusState.hasFocus) {
+                            coroutineScope.launch {
+                                listState.animateScrollToItem(0)
+                            }
+                        }
+                    }
                 )
 
                 LazyColumn(
@@ -87,9 +95,9 @@ fun HomeScreen(
                 ) {
                     // Cinematic FeaturedBanner
                     item {
-                        val coroutineScope = rememberCoroutineScope()
                         FeaturedBanner(
-                            movie = featuredMovie,
+                            activeMovie = featuredMovie,
+                            fallbackList = state.phimMoi.list,
                             onPlayClick = { movie -> onNavigateToDetail(movie.slug) },
                             onDetailClick = { movie -> onNavigateToDetail(movie.slug) },
                             modifier = Modifier
