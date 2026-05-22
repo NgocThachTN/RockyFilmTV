@@ -21,6 +21,12 @@ fun Modifier.handlePlayerKeyEvent(
                     true
                 } else false
             }
+            Key.DirectionUp, Key.DirectionDown -> {
+                if (!showControls && !showEpisodeList) {
+                    onShowControls(true)
+                    true
+                } else false
+            }
             Key.DirectionLeft -> {
                 if (!showControls && !showEpisodeList) {
                     // Direct fast rewind (-10s)

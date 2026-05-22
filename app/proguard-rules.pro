@@ -28,6 +28,19 @@
     @com.google.gson.annotations.SerializedName <fields>;
 }
 
+# Keep Retrofit API interfaces and their methods completely
+-keep interface com.rocky.filmtv.data.remote.api.** { *; }
+
+# Keep all remote DTO classes (both Gson serializable and direct model classes)
+-keep class com.rocky.filmtv.data.remote.dto.** { *; }
+-keep class com.rocky.filmtv.data.remote.api.GitHubReleaseDto { *; }
+-keep class com.rocky.filmtv.data.remote.api.GitHubAssetDto { *; }
+
+# Keep generic signature of Call, Response and Coroutines Continuation for suspend functions in Retrofit
+-keep,allowobfuscation,allowshrinking interface retrofit2.Call
+-keep,allowobfuscation,allowshrinking class retrofit2.Response
+-keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
+
 # Keep OkHttp components
 -dontwarn okhttp3.**
 -dontwarn okio.**

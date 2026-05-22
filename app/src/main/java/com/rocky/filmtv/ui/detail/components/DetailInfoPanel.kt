@@ -8,10 +8,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.tv.material3.*
 import com.rocky.filmtv.core.theme.PrimaryRed
 import com.rocky.filmtv.data.local.database.WatchHistoryEntity
 import com.rocky.filmtv.data.remote.mapper.MovieDetail
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
@@ -23,6 +28,17 @@ fun DetailInfoPanel(
     onToggleFavorite: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val focusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(Unit) {
+        try {
+            delay(200)
+            focusRequester.requestFocus()
+        } catch (e: Exception) {
+            // Ignore
+        }
+    }
+
     Column(
         modifier = modifier
     ) {
@@ -88,6 +104,7 @@ fun DetailInfoPanel(
                     }?.coerceAtLeast(0) ?: 0
                     onNavigateToPlayer(detail.slug, startIdx)
                 },
+                modifier = Modifier.focusRequester(focusRequester),
                 colors = ButtonDefaults.colors(
                     containerColor = PrimaryRed,
                     contentColor = Color.White,
