@@ -14,6 +14,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
+import com.rocky.filmtv.data.repository.UpdateManager
+import com.rocky.filmtv.data.repository.DownloadState
+import com.rocky.filmtv.data.repository.UpdateInfo
 
 data class HomeUiState(
     val phimMoi: StableMovieList = StableMovieList(),
@@ -28,11 +31,15 @@ data class HomeUiState(
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val repository: MovieRepository
+    private val repository: MovieRepository,
+    private val updateManager: UpdateManager
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
+
+    private val _updateState = MutableStateFlow<UpdateUiState>(UpdateUiState.NoUpdate)
+    val updateState: StateFlow<UpdateUiState> = _updateState.asStateFlow()
 
     private val _featuredMovie = MutableStateFlow<Movie?>(null)
     val featuredMovie: StateFlow<Movie?> = _featuredMovie.asStateFlow()
@@ -85,4 +92,44 @@ class HomeViewModel @Inject constructor(
             _featuredMovie.value = movie
         }
     }
+
+    fun checkAppUpdate() {
+        viewModelScope.launch {
+            val updateInfo = updateManager.checkForUpdate()
+            if (updateInfo != null) {
+                _updateState.value = UpdateUiState.UpdateAvailable(updateInfo)
+            }
+        }
+    }
+
+    fun startDownload(downloadUrl: String) {
+        viewModelScope.launch {
+            updateManager.downloadApk(downloadUrl).collect { downloadState ->
+                _updateState.value = when (downloadState) {
+                    is DownloadState.Downloading -> UpdateUiState.Downloading(
+                        progress = downloadState.progress,
+                        downloadedMB = downloadState.downloadedBytes / (1024 * 1024),
+                        totalMB = downloadState.totalBytes / (1024 * 1024)
+                    )
+                    is DownloadState.Success -> {
+                        updateManager.installApk(downloadState.apkFile)
+                        UpdateUiState.NoUpdate
+                    }
+                    is DownloadState.Error -> UpdateUiState.Error(downloadState.message)
+                    else -> UpdateUiState.NoUpdate
+                }
+            }
+        }
+    }
+
+    fun dismissUpdate() {
+        _updateState.value = UpdateUiState.NoUpdate
+    }
+}
+
+sealed class UpdateUiState {
+    object NoUpdate : UpdateUiState()
+    data class UpdateAvailable(val info: UpdateInfo) : UpdateUiState()
+    data class Downloading(val progress: Float, val downloadedMB: Long, val totalMB: Long) : UpdateUiState()
+    data class Error(val message: String) : UpdateUiState()
 }

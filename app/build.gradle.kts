@@ -32,7 +32,10 @@ android {
         jvmTarget = "17"
         freeCompilerArgs += listOf("-opt-in=androidx.tv.material3.ExperimentalTvMaterial3Api", "-opt-in=androidx.media3.common.util.UnstableApi")
     }
-    buildFeatures { compose = true }
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
     composeOptions { kotlinCompilerExtensionVersion = "1.5.8" }
 }
 dependencies {

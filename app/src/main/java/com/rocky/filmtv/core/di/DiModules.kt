@@ -5,6 +5,7 @@ import com.rocky.filmtv.data.local.database.AppDatabase
 import com.rocky.filmtv.data.local.database.FavoriteDao
 import com.rocky.filmtv.data.local.database.HistoryDao
 import com.rocky.filmtv.data.remote.api.OPhimApiService
+import com.rocky.filmtv.data.remote.api.GitHubUpdateService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -48,6 +49,17 @@ object DiModules {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(OPhimApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGitHubUpdateService(okHttpClient: OkHttpClient): GitHubUpdateService {
+        return Retrofit.Builder()
+            .baseUrl(GitHubUpdateService.BASE_URL)
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(GitHubUpdateService::class.java)
     }
 
     @Provides

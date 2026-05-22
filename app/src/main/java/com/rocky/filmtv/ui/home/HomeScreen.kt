@@ -22,7 +22,10 @@ import com.rocky.filmtv.ui.home.components.FeaturedBanner
 import com.rocky.filmtv.ui.home.components.MovieRow
 import com.rocky.filmtv.ui.home.components.TopMenuBar
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.onFocusChanged
+import com.rocky.filmtv.ui.home.components.UpdateDialog
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalTvMaterial3Api::class)
@@ -40,8 +43,13 @@ fun HomeScreen(
 ) {
     val state by viewModel.uiState.collectAsState()
     val featuredMovie by viewModel.featuredMovie.collectAsState()
+    val updateState by viewModel.updateState.collectAsState()
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        viewModel.checkAppUpdate()
+    }
 
     Box(
         modifier = modifier
@@ -57,7 +65,13 @@ fun HomeScreen(
             }
         } else if (state.isError) {
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .focusProperties {
+                        if (updateState !is UpdateUiState.NoUpdate) {
+                            canFocus = false
+                        }
+                    },
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -72,7 +86,15 @@ fun HomeScreen(
                 }
             }
         } else {
-            Column(modifier = Modifier.fillMaxSize()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .focusProperties {
+                        if (updateState !is UpdateUiState.NoUpdate) {
+                            canFocus = false
+                        }
+                    }
+            ) {
                 // TV-Safe Top Menu Bar (Fixed at the top)
                 TopMenuBar(
                     onNavigateToSearch = onNavigateToSearch,
@@ -170,5 +192,12 @@ fun HomeScreen(
                 }
             }
         }
+
+        // Premium Dark-Themed TV Auto-Update Dialog
+        UpdateDialog(
+            state = updateState,
+            onUpdateClick = { info -> viewModel.startDownload(info.downloadUrl) },
+            onDismissClick = { viewModel.dismissUpdate() }
+        )
     }
 }
