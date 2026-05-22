@@ -27,8 +27,13 @@ class CategoryViewModel @Inject constructor(
     private val loadedMovies = mutableListOf<Movie>()
 
     fun loadCategory(categoryType: String, type: String) {
-        if (currentCategoryType == categoryType && currentType == type) return // already loaded
-        currentCategoryType = categoryType
+        val resolvedCategoryType = if (type == "phim-le" || type == "phim-bo" || type == "hoat-hinh" || type == "tv-shows") {
+            "type"
+        } else {
+            categoryType
+        }
+        if (currentCategoryType == resolvedCategoryType && currentType == type) return // already loaded
+        currentCategoryType = resolvedCategoryType
         currentType = type
         currentPage = 1
         loadedMovies.clear()

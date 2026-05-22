@@ -115,6 +115,7 @@ fun FeaturedBanner(
                     text = movie.name,
                     color = Color.White,
                     fontSize = 32.sp,
+                    lineHeight = 38.sp,
                     fontWeight = FontWeight.ExtraBold,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
