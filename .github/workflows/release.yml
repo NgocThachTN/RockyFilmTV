@@ -42,10 +42,12 @@ jobs:
           body: |
             ## Bản phát hành mới ${{ github.ref_name }} 🎉
             
-            Xem chi tiết danh sách thay đổi và lịch sử commit trên GitHub.
-            
             ### 📦 Tệp đính kèm (Assets)
             * **RockyFilmTV-${{ github.ref_name }}.apk**: Tải xuống và cài đặt trực tiếp trên Android TV / Google TV.
+            
+            ---
+            
+          generate_release_notes: true
           draft: false
           prerelease: false
         env:
