@@ -21,6 +21,9 @@ import com.rocky.filmtv.data.remote.mapper.Movie
 import com.rocky.filmtv.ui.home.components.FeaturedBanner
 import com.rocky.filmtv.ui.home.components.MovieRow
 import com.rocky.filmtv.ui.home.components.TopMenuBar
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.focus.onFocusChanged
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
@@ -84,11 +87,20 @@ fun HomeScreen(
                 ) {
                     // Cinematic FeaturedBanner
                     item {
+                        val coroutineScope = rememberCoroutineScope()
                         FeaturedBanner(
                             movie = featuredMovie,
                             onPlayClick = { movie -> onNavigateToDetail(movie.slug) },
                             onDetailClick = { movie -> onNavigateToDetail(movie.slug) },
-                            modifier = Modifier.padding(bottom = 24.dp)
+                            modifier = Modifier
+                                .padding(bottom = 24.dp)
+                                .onFocusChanged { focusState ->
+                                    if (focusState.hasFocus) {
+                                        coroutineScope.launch {
+                                            listState.animateScrollToItem(0)
+                                        }
+                                    }
+                                }
                         )
                     }
 
