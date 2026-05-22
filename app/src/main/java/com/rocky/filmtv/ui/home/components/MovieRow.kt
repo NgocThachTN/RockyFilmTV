@@ -14,18 +14,19 @@ import androidx.tv.material3.ButtonDefaults
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Text
 import com.rocky.filmtv.data.remote.mapper.Movie
+import com.rocky.filmtv.data.remote.mapper.StableMovieList
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun MovieRow(
     title: String,
-    movies: List<Movie>,
+    movies: StableMovieList,
     onMovieClick: (Movie) -> Unit,
     modifier: Modifier = Modifier,
     onMovieFocused: ((Movie) -> Unit)? = null,
     onSeeAllClick: (() -> Unit)? = null
 ) {
-    if (movies.isEmpty()) return
+    if (movies.list.isEmpty()) return
 
     Column(
         modifier = modifier
@@ -75,7 +76,7 @@ fun MovieRow(
             modifier = Modifier.fillMaxWidth()
         ) {
             itemsIndexed(
-                items = movies,
+                items = movies.list,
                 key = { _, movie -> movie.id },
                 contentType = { _, _ -> "movie_card" }
             ) { index, movie ->

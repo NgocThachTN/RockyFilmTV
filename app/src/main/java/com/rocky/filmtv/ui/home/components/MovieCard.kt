@@ -67,6 +67,8 @@ fun MovieCard(
                     .crossfade(true)
                     .diskCachePolicy(CachePolicy.ENABLED)
                     .memoryCachePolicy(CachePolicy.ENABLED)
+                    .size(width = 280, height = 400)
+                    .precision(coil.size.Precision.AUTOMATIC)
                     .build()
             }
             

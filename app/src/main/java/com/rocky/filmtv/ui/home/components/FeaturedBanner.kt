@@ -14,8 +14,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.tv.material3.*
 import coil.compose.AsyncImage
+import coil.request.CachePolicy
+import coil.request.ImageRequest
 import com.rocky.filmtv.core.theme.PrimaryRed
 import com.rocky.filmtv.data.remote.mapper.Movie
 
@@ -34,9 +38,21 @@ fun FeaturedBanner(
             .background(Color.Black)
     ) {
         if (movie != null) {
+            val context = LocalContext.current
+            val imageRequest = remember(movie.thumbUrl, movie.posterUrl) {
+                ImageRequest.Builder(context)
+                    .data(movie.thumbUrl.ifEmpty { movie.posterUrl })
+                    .crossfade(true)
+                    .diskCachePolicy(CachePolicy.ENABLED)
+                    .memoryCachePolicy(CachePolicy.ENABLED)
+                    .size(width = 960, height = 540) // scale backdrop to 540p to save massive RAM
+                    .precision(coil.size.Precision.AUTOMATIC)
+                    .build()
+            }
+
             // Backdrop Image
             AsyncImage(
-                model = movie.thumbUrl.ifEmpty { movie.posterUrl },
+                model = imageRequest,
                 contentDescription = movie.name,
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop

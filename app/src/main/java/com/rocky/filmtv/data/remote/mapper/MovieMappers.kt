@@ -1,8 +1,10 @@
 package com.rocky.filmtv.data.remote.mapper
 
+import androidx.compose.runtime.Immutable
 import com.rocky.filmtv.data.remote.api.OPhimApiService
 import com.rocky.filmtv.data.remote.dto.*
 
+@Immutable
 data class Movie(
     val id: String,
     val name: String,
@@ -12,6 +14,11 @@ data class Movie(
     val thumbUrl: String,
     val type: String,
     val year: Int
+)
+
+@Immutable
+data class StableMovieList(
+    val list: List<Movie> = emptyList()
 )
 
 data class MovieDetail(
