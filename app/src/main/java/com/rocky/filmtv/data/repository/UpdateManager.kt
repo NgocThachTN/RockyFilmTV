@@ -35,7 +35,7 @@ class UpdateManager @Inject constructor(
     suspend fun checkForUpdate(): UpdateInfo? {
         return try {
             val latestRelease = gitHubUpdateService.getLatestRelease()
-            val serverVersion = latestRelease.tag_name.replace("v", "").trim()
+            val serverVersion = latestRelease.tag_name.replace(Regex("^[vV]"), "").trim()
             val currentVersion = BuildConfig.VERSION_NAME
 
             if (isNewerVersion(currentVersion, serverVersion)) {
