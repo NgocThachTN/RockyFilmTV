@@ -5,6 +5,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -28,6 +33,7 @@ fun FavoriteScreen(
     viewModel: FavoriteViewModel = hiltViewModel()
 ) {
     val movies by viewModel.favorites.collectAsState()
+    val backButtonFocusRequester = remember { FocusRequester() }
 
     Box(
         modifier = modifier
@@ -45,6 +51,7 @@ fun FavoriteScreen(
             ) {
                 Button(
                     onClick = onBackClick,
+                    modifier = Modifier.focusRequester(backButtonFocusRequester),
                     colors = ButtonDefaults.colors(
                         containerColor = Color.Transparent,
                         contentColor = Color.White,
@@ -92,14 +99,19 @@ fun FavoriteScreen(
                         .fillMaxWidth()
                         .weight(1f)
                 ) {
-                    items(
+                    itemsIndexed(
                         items = movies,
-                        key = { it.id },
-                        contentType = { "movie_card" }
-                    ) { movie ->
+                        key = { _, movie -> movie.id }
+                    ) { index, movie ->
+                        val isFirstRow = index < 5
                         MovieCard(
                             movie = movie,
-                            onMovieClick = { onNavigateToDetail(it.slug) }
+                            onMovieClick = { onNavigateToDetail(it.slug) },
+                            modifier = Modifier.focusProperties {
+                                if (isFirstRow) {
+                                    up = backButtonFocusRequester
+                                }
+                            }
                         )
                     }
                 }

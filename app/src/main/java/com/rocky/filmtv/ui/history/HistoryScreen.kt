@@ -21,6 +21,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalContext
 import androidx.tv.material3.*
 import coil.compose.AsyncImage
 import com.rocky.filmtv.core.theme.DarkBackground
@@ -36,6 +41,7 @@ fun HistoryScreen(
     viewModel: HistoryViewModel = hiltViewModel()
 ) {
     val items by viewModel.historyItems.collectAsState()
+    val backButtonFocusRequester = remember { FocusRequester() }
 
     Box(
         modifier = modifier
@@ -53,6 +59,7 @@ fun HistoryScreen(
             ) {
                 Button(
                     onClick = onBackClick,
+                    modifier = Modifier.focusRequester(backButtonFocusRequester),
                     colors = ButtonDefaults.colors(
                         containerColor = Color.Transparent,
                         contentColor = Color.White,
@@ -100,11 +107,13 @@ fun HistoryScreen(
                         .fillMaxWidth()
                         .weight(1f)
                 ) {
-                    items(items) { history ->
+                    itemsIndexed(items) { index, history ->
+                        val isFirstRow = index < 4
                         HistoryCard(
                             history = history,
                             onCardClick = { onNavigateToDetail(history.slug) },
-                            onDeleteClick = { viewModel.deleteHistoryItem(history.id) }
+                            onDeleteClick = { viewModel.deleteHistoryItem(history.id) },
+                            backButtonFocusRequester = if (isFirstRow) backButtonFocusRequester else null
                         )
                     }
                 }
@@ -118,7 +127,8 @@ fun HistoryScreen(
 fun HistoryCard(
     history: WatchHistoryEntity,
     onCardClick: () -> Unit,
-    onDeleteClick: () -> Unit
+    onDeleteClick: () -> Unit,
+    backButtonFocusRequester: FocusRequester? = null
 ) {
     var isFocused by remember { mutableStateOf(false) }
     val scale by animateFloatAsState(targetValue = if (isFocused) 1.05f else 1.0f, label = "scale")
@@ -210,7 +220,11 @@ fun HistoryCard(
                     focusedContentColor = Color.Black
                 ),
                 shape = ButtonDefaults.shape(shape = RoundedCornerShape(4.dp)),
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .weight(1f)
+                    .focusProperties {
+                        backButtonFocusRequester?.let { up = it }
+                    },
                 contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp)
             ) {
                 Text(
@@ -230,6 +244,9 @@ fun HistoryCard(
                     focusedContentColor = Color.Black
                 ),
                 shape = ButtonDefaults.shape(shape = RoundedCornerShape(4.dp)),
+                modifier = Modifier.focusProperties {
+                    backButtonFocusRequester?.let { up = it }
+                },
                 contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp)
             ) {
                 Text(
