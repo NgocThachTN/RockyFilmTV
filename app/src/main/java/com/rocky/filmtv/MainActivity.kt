@@ -50,6 +50,9 @@ fun RockyFilmTVAppNavigation() {
                 onNavigateToDetail = { slug ->
                     navController.navigate(Screen.Detail.createRoute(slug))
                 },
+                onNavigateToPlayer = { movieSlug, episodeIndex ->
+                    navController.navigate(Screen.Player.createRoute(movieSlug, episodeIndex))
+                },
                 onNavigateToSearch = {
                     navController.navigate(Screen.Search.route)
                 },

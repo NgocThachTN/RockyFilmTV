@@ -29,6 +29,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen(
     onNavigateToDetail: (String) -> Unit,
+    onNavigateToPlayer: (String, Int) -> Unit,
     onNavigateToSearch: () -> Unit,
     onNavigateToFavorite: () -> Unit,
     onNavigateToHistory: () -> Unit,
@@ -98,7 +99,7 @@ fun HomeScreen(
                         FeaturedBanner(
                             activeMovie = featuredMovie,
                             fallbackList = state.phimMoi.list,
-                            onPlayClick = { movie -> onNavigateToDetail(movie.slug) },
+                            onPlayClick = { movie -> onNavigateToPlayer(movie.slug, 0) },
                             onDetailClick = { movie -> onNavigateToDetail(movie.slug) },
                             modifier = Modifier
                                 .padding(bottom = 24.dp)
