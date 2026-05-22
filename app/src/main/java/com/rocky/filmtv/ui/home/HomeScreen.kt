@@ -66,230 +66,230 @@ fun HomeScreen(
                 }
             }
         } else {
-            LazyColumn(
-                state = listState,
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(bottom = 48.dp)
-            ) {
-                // TV-Safe Top Menu Bar
-                item {
+            Column(modifier = Modifier.fillMaxSize()) {
+                // TV-Safe Top Menu Bar (Fixed at the top)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 32.dp, vertical = 16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 32.dp, vertical = 16.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(10.dp)
-                        ) {
-                            // Stunning Light Sea Blue Circular Play Logo
-                            Box(
-                                modifier = Modifier
-                                    .size(34.dp)
-                                    .background(
-                                        brush = androidx.compose.ui.graphics.Brush.linearGradient(
-                                            colors = listOf(Color(0xFF00F0FF), Color(0xFF0072FF))
-                                        ),
-                                        shape = androidx.compose.foundation.shape.CircleShape
+                        // Stunning Light Sea Blue Circular Play Logo
+                        Box(
+                            modifier = Modifier
+                                .size(34.dp)
+                                .background(
+                                    brush = androidx.compose.ui.graphics.Brush.linearGradient(
+                                        colors = listOf(Color(0xFF00F0FF), Color(0xFF0072FF))
                                     ),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                androidx.compose.foundation.Canvas(modifier = Modifier.size(14.dp)) {
-                                    val path = androidx.compose.ui.graphics.Path().apply {
-                                        moveTo(size.width * 0.28f, size.height * 0.18f)
-                                        lineTo(size.width * 0.82f, size.height * 0.5f)
-                                        lineTo(size.width * 0.28f, size.height * 0.82f)
-                                        close()
-                                    }
-                                    drawPath(path = path, color = Color.White)
+                                    shape = androidx.compose.foundation.shape.CircleShape
+                                ),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            androidx.compose.foundation.Canvas(modifier = Modifier.size(14.dp)) {
+                                val path = androidx.compose.ui.graphics.Path().apply {
+                                    moveTo(size.width * 0.28f, size.height * 0.18f)
+                                    lineTo(size.width * 0.82f, size.height * 0.5f)
+                                    lineTo(size.width * 0.28f, size.height * 0.82f)
+                                    close()
                                 }
-                            }
-
-                            // Typography brand text
-                            Row {
-                                Text(
-                                    text = "ROCKY FILM ",
-                                    color = Color.White,
-                                    fontSize = 19.sp,
-                                    fontWeight = androidx.compose.ui.text.font.FontWeight.Black
-                                )
-                                Text(
-                                    text = "TV",
-                                    color = PrimaryRed,
-                                    fontSize = 19.sp,
-                                    fontWeight = androidx.compose.ui.text.font.FontWeight.Black
-                                )
+                                drawPath(path = path, color = Color.White)
                             }
                         }
 
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            verticalAlignment = Alignment.CenterVertically
+                        // Typography brand text
+                        Row {
+                            Text(
+                                text = "ROCKY FILM ",
+                                color = Color.White,
+                                fontSize = 19.sp,
+                                fontWeight = androidx.compose.ui.text.font.FontWeight.Black
+                            )
+                            Text(
+                                text = "TV",
+                                color = PrimaryRed,
+                                fontSize = 19.sp,
+                                fontWeight = androidx.compose.ui.text.font.FontWeight.Black
+                            )
+                        }
+                    }
+
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Button(
+                            onClick = onNavigateToSearch,
+                            colors = ButtonDefaults.colors(
+                                containerColor = Color.Transparent,
+                                contentColor = Color.White,
+                                focusedContainerColor = Color.White,
+                                focusedContentColor = Color.Black
+                            ),
+                            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
                         ) {
-                            Button(
-                                onClick = onNavigateToSearch,
-                                colors = ButtonDefaults.colors(
-                                    containerColor = Color.Transparent,
-                                    contentColor = Color.White,
-                                    focusedContainerColor = Color.White,
-                                    focusedContentColor = Color.Black
-                                ),
-                                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
-                            ) {
-                                Text(
-                                    text = "Tìm Kiếm",
-                                    modifier = Modifier.align(Alignment.CenterVertically)
-                                )
-                            }
+                            Text(
+                                text = "Tìm Kiếm",
+                                modifier = Modifier.align(Alignment.CenterVertically)
+                            )
+                        }
 
-                            Button(
-                                onClick = onNavigateToFavorite,
-                                colors = ButtonDefaults.colors(
-                                    containerColor = Color.Transparent,
-                                    contentColor = Color.White,
-                                    focusedContainerColor = Color.White,
-                                    focusedContentColor = Color.Black
-                                ),
-                                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
-                            ) {
-                                Text(
-                                    text = "Yêu Thích",
-                                    modifier = Modifier.align(Alignment.CenterVertically)
-                                )
-                            }
+                        Button(
+                            onClick = onNavigateToFavorite,
+                            colors = ButtonDefaults.colors(
+                                containerColor = Color.Transparent,
+                                contentColor = Color.White,
+                                focusedContainerColor = Color.White,
+                                focusedContentColor = Color.Black
+                            ),
+                            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+                        ) {
+                            Text(
+                                text = "Yêu Thích",
+                                modifier = Modifier.align(Alignment.CenterVertically)
+                            )
+                        }
 
-                            Button(
-                                onClick = onNavigateToHistory,
-                                colors = ButtonDefaults.colors(
-                                    containerColor = Color.Transparent,
-                                    contentColor = Color.White,
-                                    focusedContainerColor = Color.White,
-                                    focusedContentColor = Color.Black
-                                ),
-                                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
-                            ) {
-                                Text(
-                                    text = "Lịch Sử Xem",
-                                    modifier = Modifier.align(Alignment.CenterVertically)
-                                )
-                            }
+                        Button(
+                            onClick = onNavigateToHistory,
+                            colors = ButtonDefaults.colors(
+                                containerColor = Color.Transparent,
+                                contentColor = Color.White,
+                                focusedContainerColor = Color.White,
+                                focusedContentColor = Color.Black
+                            ),
+                            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+                        ) {
+                            Text(
+                                text = "Lịch Sử Xem",
+                                modifier = Modifier.align(Alignment.CenterVertically)
+                            )
+                        }
 
-                            Button(
-                                onClick = onNavigateToGenreList,
-                                colors = ButtonDefaults.colors(
-                                    containerColor = Color.Transparent,
-                                    contentColor = Color.White,
-                                    focusedContainerColor = Color.White,
-                                    focusedContentColor = Color.Black
-                                ),
-                                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
-                            ) {
-                                Text(
-                                    text = "Thể Loại",
-                                    modifier = Modifier.align(Alignment.CenterVertically)
-                                )
-                            }
+                        Button(
+                            onClick = onNavigateToGenreList,
+                            colors = ButtonDefaults.colors(
+                                containerColor = Color.Transparent,
+                                contentColor = Color.White,
+                                focusedContainerColor = Color.White,
+                                focusedContentColor = Color.Black
+                            ),
+                            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+                        ) {
+                            Text(
+                                text = "Thể Loại",
+                                modifier = Modifier.align(Alignment.CenterVertically)
+                            )
+                        }
 
-                            Button(
-                                onClick = { onNavigateToCategory("type", "phim-bo", "Phim Bộ") },
-                                colors = ButtonDefaults.colors(
-                                    containerColor = Color.Transparent,
-                                    contentColor = Color.White,
-                                    focusedContainerColor = Color.White,
-                                    focusedContentColor = Color.Black
-                                ),
-                                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
-                            ) {
-                                Text(
-                                    text = "Phim Bộ",
-                                    modifier = Modifier.align(Alignment.CenterVertically)
-                                )
-                            }
+                        Button(
+                            onClick = { onNavigateToCategory("type", "phim-bo", "Phim Bộ") },
+                            colors = ButtonDefaults.colors(
+                                containerColor = Color.Transparent,
+                                contentColor = Color.White,
+                                focusedContainerColor = Color.White,
+                                focusedContentColor = Color.Black
+                            ),
+                            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+                        ) {
+                            Text(
+                                text = "Phim Bộ",
+                                modifier = Modifier.align(Alignment.CenterVertically)
+                            )
+                        }
 
-                            Button(
-                                onClick = { onNavigateToCategory("type", "phim-le", "Phim Lẻ") },
-                                colors = ButtonDefaults.colors(
-                                    containerColor = Color.Transparent,
-                                    contentColor = Color.White,
-                                    focusedContainerColor = Color.White,
-                                    focusedContentColor = Color.Black
-                                ),
-                                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
-                            ) {
-                                Text(
-                                    text = "Phim Lẻ",
-                                    modifier = Modifier.align(Alignment.CenterVertically)
-                                )
-                            }
+                        Button(
+                            onClick = { onNavigateToCategory("type", "phim-le", "Phim Lẻ") },
+                            colors = ButtonDefaults.colors(
+                                containerColor = Color.Transparent,
+                                contentColor = Color.White,
+                                focusedContainerColor = Color.White,
+                                focusedContentColor = Color.Black
+                            ),
+                            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+                        ) {
+                            Text(
+                                text = "Phim Lẻ",
+                                modifier = Modifier.align(Alignment.CenterVertically)
+                            )
                         }
                     }
                 }
 
-                // Cinematic FeaturedBanner
-                item {
-                    FeaturedBanner(
-                        movie = featuredMovie,
-                        onPlayClick = { movie -> onNavigateToDetail(movie.slug) },
-                        onDetailClick = { movie -> onNavigateToDetail(movie.slug) },
-                        modifier = Modifier.padding(bottom = 24.dp)
-                    )
-                }
+                LazyColumn(
+                    state = listState,
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(bottom = 48.dp)
+                ) {
+                    // Cinematic FeaturedBanner
+                    item {
+                        FeaturedBanner(
+                            movie = featuredMovie,
+                            onPlayClick = { movie -> onNavigateToDetail(movie.slug) },
+                            onDetailClick = { movie -> onNavigateToDetail(movie.slug) },
+                            modifier = Modifier.padding(bottom = 24.dp)
+                        )
+                    }
 
-                // Recently Updated Movies
-                item {
-                    MovieRow(
-                        title = "Phim Mới Cập Nhật",
-                        movies = state.phimMoi,
-                        onMovieClick = { movie -> onNavigateToDetail(movie.slug) },
-                        onMovieFocused = { movie -> viewModel.setFeaturedMovie(movie) },
-                        onSeeAllClick = { onNavigateToCategory("phim-moi", "phim-moi", "Phim Mới Cập Nhật") }
-                    )
-                }
+                    // Recently Updated Movies
+                    item {
+                        MovieRow(
+                            title = "Phim Mới Cập Nhật",
+                            movies = state.phimMoi,
+                            onMovieClick = { movie -> onNavigateToDetail(movie.slug) },
+                            onMovieFocused = { movie -> viewModel.setFeaturedMovie(movie) },
+                            onSeeAllClick = { onNavigateToCategory("phim-moi", "phim-moi", "Phim Mới Cập Nhật") }
+                        )
+                    }
 
-                // Phim Lẻ
-                item {
-                    MovieRow(
-                        title = "Phim Lẻ Nổi Bật",
-                        movies = state.phimLe,
-                        onMovieClick = { movie -> onNavigateToDetail(movie.slug) },
-                        onMovieFocused = { movie -> viewModel.setFeaturedMovie(movie) },
-                        onSeeAllClick = { onNavigateToCategory("type", "phim-le", "Phim Lẻ") }
-                    )
-                }
+                    // Phim Lẻ
+                    item {
+                        MovieRow(
+                            title = "Phim Lẻ Nổi Bật",
+                            movies = state.phimLe,
+                            onMovieClick = { movie -> onNavigateToDetail(movie.slug) },
+                            onMovieFocused = { movie -> viewModel.setFeaturedMovie(movie) },
+                            onSeeAllClick = { onNavigateToCategory("type", "phim-le", "Phim Lẻ") }
+                        )
+                    }
 
-                // Phim Bộ
-                item {
-                    MovieRow(
-                        title = "Phim Bộ Đặc Sắc",
-                        movies = state.phimBo,
-                        onMovieClick = { movie -> onNavigateToDetail(movie.slug) },
-                        onMovieFocused = { movie -> viewModel.setFeaturedMovie(movie) },
-                        onSeeAllClick = { onNavigateToCategory("type", "phim-bo", "Phim Bộ") }
-                    )
-                }
+                    // Phim Bộ
+                    item {
+                        MovieRow(
+                            title = "Phim Bộ Đặc Sắc",
+                            movies = state.phimBo,
+                            onMovieClick = { movie -> onNavigateToDetail(movie.slug) },
+                            onMovieFocused = { movie -> viewModel.setFeaturedMovie(movie) },
+                            onSeeAllClick = { onNavigateToCategory("type", "phim-bo", "Phim Bộ") }
+                        )
+                    }
 
-                // Hoạt Hình
-                item {
-                    MovieRow(
-                        title = "Hoạt Hình & Anime",
-                        movies = state.hoatHinh,
-                        onMovieClick = { movie -> onNavigateToDetail(movie.slug) },
-                        onMovieFocused = { movie -> viewModel.setFeaturedMovie(movie) },
-                        onSeeAllClick = { onNavigateToCategory("type", "hoat-hinh", "Hoạt Hình") }
-                    )
-                }
+                    // Hoạt Hình
+                    item {
+                        MovieRow(
+                            title = "Hoạt Hình & Anime",
+                            movies = state.hoatHinh,
+                            onMovieClick = { movie -> onNavigateToDetail(movie.slug) },
+                            onMovieFocused = { movie -> viewModel.setFeaturedMovie(movie) },
+                            onSeeAllClick = { onNavigateToCategory("type", "hoat-hinh", "Hoạt Hình") }
+                        )
+                    }
 
-                // TV Shows
-                item {
-                    MovieRow(
-                        title = "TV Shows hấp dẫn",
-                        movies = state.tvShows,
-                        onMovieClick = { movie -> onNavigateToDetail(movie.slug) },
-                        onMovieFocused = { movie -> viewModel.setFeaturedMovie(movie) },
-                        onSeeAllClick = { onNavigateToCategory("type", "tv-shows", "TV Shows") }
-                    )
+                    // TV Shows
+                    item {
+                        MovieRow(
+                            title = "TV Shows hấp dẫn",
+                            movies = state.tvShows,
+                            onMovieClick = { movie -> onNavigateToDetail(movie.slug) },
+                            onMovieFocused = { movie -> viewModel.setFeaturedMovie(movie) },
+                            onSeeAllClick = { onNavigateToCategory("type", "tv-shows", "TV Shows") }
+                        )
+                    }
                 }
             }
         }
